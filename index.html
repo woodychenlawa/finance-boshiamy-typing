@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>理財 × 無蝦米 打字練習</title>
+<style>
+  :root { --bg:#f6f4ec; --card:#fff; --ink:#2b2b2b; --muted:#8a857a; --acc:#2f7d62; --acc2:#e9a13b; --err:#d64545; --ok:#2f7d62; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif; background:var(--bg); color:var(--ink); line-height:1.6; }
+  header { background:#1e2e28; color:#fff; padding:22px 18px; }
+  header h1 { margin:0 0 6px; font-size:22px; }
+  header p { margin:0; opacity:.85; font-size:14px; }
+  .wrap { max-width:980px; margin:0 auto; padding:18px 14px 60px; }
+  .toolbar { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0; align-items:center; }
+  .pill { border:1px solid #d8d2c2; background:#fff; border-radius:999px; padding:7px 14px; cursor:pointer; font-size:14px; }
+  .pill.active { background:var(--acc); color:#fff; border-color:var(--acc); }
+  .grid { display:grid; grid-template-columns:1.1fr .9fr; gap:14px; }
+  @media (max-width:800px){ .grid{ grid-template-columns:1fr; } }
+  .card { background:var(--card); border-radius:14px; padding:18px; box-shadow:0 2px 10px rgba(0,0,0,.06); border:1px solid #e8e2d3; }
+  .tag { display:inline-block; font-size:12px; background:#eef5f1; color:var(--acc); border-radius:999px; padding:2px 10px; margin-right:6px; font-weight:700; }
+  .term { font-size:28px; font-weight:800; margin:8px 0 4px; }
+  .def { font-size:15px; background:#faf8f1; border-left:4px solid var(--acc2); padding:10px 12px; border-radius:0 10px 10px 0; margin:10px 0; }
+  .target-box { font-size:21px; letter-spacing:1px; background:#1e2e28; color:#fff; border-radius:12px; padding:14px; margin:10px 0; line-height:1.9; }
+  .target-box.blur { filter:blur(8px); user-select:none; }
+  .char-ok { color:#7fd6a8; }
+  .char-err { color:#ff8a8a; background:rgba(255,255,255,.12); border-radius:4px; }
+  .char-pending { opacity:.9; }
+  textarea { width:100%; min-height:110px; font-size:18px; padding:12px; border-radius:12px; border:2px solid #d8d2c2; resize:vertical; line-height:1.7; }
+  textarea:focus { outline:none; border-color:var(--acc); }
+  .stats { display:flex; gap:10px; flex-wrap:wrap; margin:12px 0; }
+  .stat { flex:1; min-width:120px; background:#faf8f1; border:1px solid #e8e2d3; border-radius:12px; padding:10px; text-align:center; }
+  .stat b { display:block; font-size:22px; }
+  .stat span { font-size:12px; color:var(--muted); }
+  .btn { border:0; border-radius:10px; padding:11px 16px; font-size:15px; cursor:pointer; font-weight:700; }
+  .btn-p { background:var(--acc); color:#fff; }
+  .btn-s { background:#fff; border:1px solid #d8d2c2; }
+  .btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .small { font-size:13px; color:var(--muted); }
+  details { margin-top:10px; }
+  summary { cursor:pointer; font-weight:700; }
+  .roots { width:100%; border-collapse:collapse; font-size:13px; margin-top:8px; }
+  .roots th,.roots td { border:1px solid #e2dccb; padding:6px 8px; text-align:left; }
+  .roots th { background:#faf8f1; }
+  .progress-bar { height:10px; background:#e8e2d3; border-radius:999px; overflow:hidden; margin-top:8px; }
+  .progress-bar i { display:block; height:100%; background:var(--acc); width:0%; }
+  .kbd { background:#eee; border:1px solid #ccc; border-bottom-width:2px; border-radius:6px; padding:0 6px; font-family:monospace; }
+  footer { text-align:center; color:var(--muted); font-size:12px; padding:20px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="padding:0">
+    <h1>💰 理財 × 無蝦米 打字練習</h1>
+    <p>看理財知識卡 → 切換到無蝦米輸入法 → 照著打出同樣的中文 → 同時學理財＋練拆字手感。單一檔案、免安裝、進度自動保存在瀏覽器。</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="toolbar" id="cats">
+    <button class="pill active" data-cat="all">全部</button>
+    <button class="pill" data-cat="基礎名詞">基礎名詞</button>
+    <button class="pill" data-cat="儲蓄預算">儲蓄預算</button>
+    <button class="pill" data-cat="投資入門">投資入門</button>
+    <span class="small" id="countLabel" style="margin-left:auto"></span>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div><span class="tag" id="qCat">基礎名詞</span><span class="tag" id="qNum" style="background:#fdf2df;color:#8a5f14">1 / 30</span></div>
+      <div class="term" id="qTerm">複利</div>
+      <div class="def" id="qDef"></div>
+      <div class="small" id="qWhy" style="background:#eef5f1;border-radius:10px;padding:8px 10px"></div>
+      <h3 style="margin:14px 0 6px;font-size:15px">⌨️ 請打出下面這句（對照練習）：</h3>
+      <div class="target-box" id="targetBox"></div>
+      <label class="small"><input type="checkbox" id="hideToggle"> 遮住對照進入測驗模式（練熟後用）</label>
+      <textarea id="input" placeholder="把輸入法切到【無蝦米】，在這裡照著上面打出來…&#10;提示：標點符號可以先省略，系統會忽略標點比對。"></textarea>
+      <div class="stats">
+        <div class="stat"><b id="sTime">0.0s</b><span>用時</span></div>
+        <div class="stat"><b id="sSpeed">0</b><span>字／分</span></div>
+        <div class="stat"><b id="sAcc">—</b><span>正確率</span></div>
+        <div class="stat"><b id="sDone">0/30</b><span>已完成</span></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-p" id="btnCheck">✅ 完成送出</button>
+        <button class="btn btn-s" id="btnNext">⏭ 下一題</button>
+        <button class="btn btn-s" id="btnRandom">🎲 隨機</button>
+        <button class="btn btn-s" id="btnReset">↺ 重打</button>
+      </div>
+      <div id="feedback" style="margin-top:10px;font-size:15px;font-weight:700"></div>
+      <div class="progress-bar"><i id="bar"></i></div>
+    </div>
+
+    <div>
+      <div class="card">
+        <h3 style="margin:0 0 8px">📖 怎麼練無蝦米？</h3>
+        <ol class="small" style="margin:0;padding-left:18px;line-height:1.9">
+          <li>系統先切到 <b>無蝦米輸入法</b>（Windows / Mac / 手機都有版）。</li>
+          <li>看左邊深色框的句子，<b>一字一字用無蝦米拆碼打出</b>來。</li>
+          <li>打錯沒關係，綠字＝對、紅字＝錯，即時對照。</li>
+          <li>按「完成送出」滿 80 分就算過關，會自動存進度。</li>
+          <li>熟了之後勾選「遮住對照」挑戰默打。</li>
+        </ol>
+        <details open>
+          <summary>🔑 無蝦米核心觀念（3分鐘速記）</summary>
+          <p class="small">無蝦米是<b>形碼</b>：看字形拆成字根，每個字根對應一個英文字母 <span class="kbd">A</span>～<span class="kbd">Z</span>。原則：<b>取大不取小、由上而下、由左而右、由外而內</b>，大字最多取 4 碼。例如「好」＝女子 → <span class="kbd">G</span> + <span class="kbd">O</span>。常用字多有簡速碼（一碼字），先背一碼字最划算。</p>
+          <p class="small">完整碼表有版權，本工具不內建盜版碼表。查碼請用官版：<br>• 官方查碼：嘸蝦米官網 → 查碼程式<br>• 手機查碼：裝正式版無蝦米 App 內建查碼<br>練習時重點是「看到字 → 想到拆法 → 手指打出」，本工具幫你練後半段。</p>
+        </details>
+        <details>
+          <summary>⌨️ 常用英文字母字根速查（精簡助記）</summary>
+          <table class="roots">
+            <tr><th>鍵</th><th>代表字根舉例</th><th>助記</th></tr>
+            <tr><td><b>E</b></td><td>一、工、七</td><td>橫畫類</td></tr>
+            <tr><td><b>D</b></td><td>日、目、曰</td><td>日部</td></tr>
+            <tr><td><b>G</b></td><td>女、毋、母</td><td>女部（好=G+O）</td></tr>
+            <tr><td><b>O</b></td><td>人、子、亻</td><td>人部</td></tr>
+            <tr><td><b>A</b></td><td>米、木、禾</td><td>米字邊</td></tr>
+            <tr><td><b>S</b></td><td>水、氵、火</td><td>水火</td></tr>
+            <tr><td><b>J</b></td><td>心、小、忄</td><td>心部</td></tr>
+            <tr><td><b>K</b></td><td>口、力、刀</td><td>口部</td></tr>
+            <tr><td><b>N</b></td><td>手、才、竹</td><td>手部</td></tr>
+            <tr><td><b>H</b></td><td>竹、土、王</td><td>竹頭土底</td></tr>
+          </table>
+          <p class="small">※ 精簡版僅助記，正式學請對照官方版本字根總表，避免背錯。</p>
+        </details>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h3 style="margin:0 0 8px">🏆 我的學習紀錄</h3>
+        <div class="small" id="log">尚未完成任何一題，加油！</div>
+        <div class="btn-row"><button class="btn btn-s" id="btnClear">清除紀錄</button></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>本工具為自學用：理財內容為通用知識非投資建議 • 無蝦米為劉重次先生發明之輸入法，碼表版權屬原作者</footer>
+</div>
+
+<script>
+const DATA = [
+ // 基礎名詞 10
+ {cat:"基礎名詞", term:"複利", def:"複利就是把利息再投入，本金加利息一起滾，時間越長效果越驚人。", why:"為什麼重要：越早開始，錢滾錢差距越大，是理財第一觀念。", text:"複利是把利息再投入讓錢越滾越大越早開始效果越好"},
+ {cat:"基礎名詞", term:"通貨膨脹", def:"東西越來越貴、錢越來越薄，就是通貨膨脹。每年2%通膨，十年後錢的購買力少近兩成。", why:"現金放著不動其實在變薄，所以要學會讓錢跟上通膨。", text:"通貨膨脹會讓錢變薄所以現金放著不動其實在虧錢"},
+ {cat:"基礎名詞", term:"資產", def:"能幫你賺錢或增值的東西叫資產，例如股票、債券、房子出租。", why:"累積資產才能脫離只靠薪水過活。", text:"資產是能幫你賺錢的東西要努力累積資產"},
+ {cat:"基礎名詞", term:"負債", def:"要你一直掏錢出去的叫負債，例如高利率卡債、不用來賺錢的貸款。", why:"先分清想要還是需要，避免壞負債吃掉薪水。", text:"負債是讓你一直掏錢的東西要小心高利率卡債"},
+ {cat:"基礎名詞", term:"淨資產", def:"淨資產等於全部資產減掉全部負債，是你真正的身價。", why:"每月追蹤一次，就知道自己是變有錢還是變窮。", text:"淨資產等於資產減掉負債每月追蹤一次最清楚"},
+ {cat:"基礎名詞", term:"機會成本", def:"選了A就放棄B，B的價值就是機會成本。買新手機的成本不只是錢，還有少存下的錢。", why:"每次花錢都想一下，會少掉很多衝動消費。", text:"選了這個就放棄那個放棄的價值就是機會成本"},
+ {cat:"基礎名詞", term:"利率", def:"借錢的價格就是利率。年利率5%代表借一百萬一年要付五萬利息。", why:"存款看利率、借款更要看利率，差1%差很多。", text:"利率是借錢的價格借款前一定要看清楚年利率"},
+ {cat:"基礎名詞", term:"ETF", def:"ETF是一籃子股票的組合，一次買進就分散投資，例如0050、VOO。", why:"新手不想選股，可從大盤型ETF開始認識市場。", text:"股票型基金一次買一籃子股票就能分散風險"},
+ {cat:"基礎名詞", term:"風險與報酬", def:"想賺越多通常要冒越大風險，沒有穩賺不賠又高報酬的東西。", why:"遇到保證高獲利的，幾乎都是詐騙警訊。", text:"報酬越高風險越大沒有穩賺不賠又高報酬的事"},
+ {cat:"基礎名詞", term:"現金流", def:"每個月進來多少、花掉多少、剩下多少，就是現金流。", why:"現金流為正才能存錢投資，是所有理財的起點。", text:"每月賺多少花多少剩下多少就是你的現金流"},
+ // 儲蓄預算 10
+ {cat:"儲蓄預算", term:"緊急預備金", def:"留三到六個月生活費在活存，以防失業、生病、意外。", why:"有預備金才不會一出事就借高利貸或賣股票。", text:"先存三到六個月生活費當緊急預備金再談投資"},
+ {cat:"儲蓄預算", term:"五十三十二十法則", def:"薪水分三份：50%需要、30%想要、20%儲蓄投資。", why:"最簡單的預算框架，新手照著分就不會月光。", text:"薪水五成需要三成想要兩成存下就是五十三十二十法則"},
+ {cat:"儲蓄預算", term:"記帳", def:"記下每一筆花費兩週，你就會發現錢都跑去哪了。", why:"不是要省到痛苦，而是找到漏水的地方補起來。", text:"記帳兩週就能發現錢都花去哪裡漏水在哪裡"},
+ {cat:"儲蓄預算", term:"先存後花", def:"薪水一入帳先轉20%去儲蓄戶，剩下的才拿來花。", why:"先花再存永遠存不到，先存再花才存得到。", text:"薪水一入帳先存兩成剩下的才拿來花用"},
+ {cat:"儲蓄預算", term:"定期定額儲蓄", def:"設定每月自動轉帳存錢，靠系統不靠意志力。", why:"自動化是存錢成功率最高的方法。", text:"設定每月自動轉帳存錢靠系統不靠意志力"},
+ {cat:"儲蓄預算", term:"想要與需要", def:"需要是沒它活不下去，想要是沒它也沒差。購物車放三天再決定。", why:"分清楚想要需要，一年可以多存好幾萬。", text:"購物車先放三天分清楚想要還是需要再買"},
+ {cat:"儲蓄預算", term:"高利率債務", def:"卡債循環利率常常超過14%，是財富殺手，要優先還清。", why:"投資報酬很難贏過卡債利息，先還再投資。", text:"卡債利息超過一成四要優先還清不要只繳最低"},
+ {cat:"儲蓄預算", term:"存款階梯", def:"把錢分三層：活存應急、定存備用、投資增值。", why:"每筆錢有任務，就不會亂動緊急預備金去投資。", text:"活存應急定存備用投資增值每筆錢都有任務"},
+ {cat:"儲蓄預算", term:"年度總檢視", def:"每年底算一次總資產、總花費、存下比例，調整明年目標。", why:"一年檢視一次，理財才會越來越順。", text:"每年底算一次總資產和存下比例調整明年目標"},
+ {cat:"儲蓄預算", term:"存錢目標視覺化", def:"把目標金額貼在牆上，例如一年存十二萬，每月一萬。", why:"看得到的目標，大腦才願意配合存錢。", text:"把存錢目標貼在牆上每月存一萬一年十二萬"},
+ // 投資入門 10
+ {cat:"投資入門", term:"股票", def:"買股票就是當公司小股東，公司賺錢你跟著賺，賠錢也跟著賠。", why:"股票長期報酬高但波動大，要用閒錢投資。", text:"買股票就是當公司小股東賺賠都要一起承擔"},
+ {cat:"投資入門", term:"債券", def:"債券是借錢給政府或公司，對方定期付你利息、到期還本金。", why:"債券波動比股票小，常用來平衡風險。", text:"債券是借錢給政府或公司定期領利息到期還本金"},
+ {cat:"投資入門", term:"基金", def:"基金是集合大家的錢請專家代操，分散又省事，但要付管理費。", why:"沒時間研究，就用基金參與市場。", text:"基金是集合大家的錢請專家幫忙投資要付管理費"},
+ {cat:"投資入門", term:"分散風險", def:"不要把所有錢壓在同一檔股票，要分產業、分地區、分時間。", why:"分散不能保證賺，但能避免一次就出局。", text:"不要把所有雞蛋放同一籃子要分散產業和時間"},
+ {cat:"投資入門", term:"定期定額投資", def:"每月固定金額買同一檔，不管漲跌，長期平均成本。", why:"克服追高殺低，忙碌上班族最適合。", text:"每月固定金額買同一檔長期下來成本最平均"},
+ {cat:"投資入門", term:"殖利率", def:"每年領到的股息除以股價，就是殖利率。5%代表一百萬一年領五萬。", why:"只看殖利率會踩雷，還要看公司能不能一直賺。", text:"股息除以股價就是殖利率還要看公司賺不賺錢"},
+ {cat:"投資入門", term:"本益比", def:"股價除以每股盈餘，代表要幾年才回本。越高代表越貴。", why:"便宜沒好貨、貴也不一定好，要搭配成長看。", text:"股價除以每股盈餘就是本益比越高代表越貴"},
+ {cat:"投資入門", term:"長期持有", def:"好公司也要給它時間，頻繁買賣多半輸給手續費和情緒。", why:"股市短期是投票機，長期是體重計。", text:"好公司也要給它時間不要頻繁買賣追高殺低"},
+ {cat:"投資入門", term:"停損與停利", def:"買前先想好跌幾成出場、賺幾成收手，寫下來嚴格執行。", why:"沒紀律的投資，最後都變成情緒勒索自己。", text:"買前先想好跌幾成出場賺幾成收手寫下執行"},
+ {cat:"投資入門", term:"詐騙警訊", def:"保證獲利、穩賺不賠、老師帶單、要你匯到私人帳戶，都是詐騙。", why:"保住本金比什麼都重要，懷疑就先查165。", text:"保證獲利穩賺不賠老師帶單幾乎都是詐騙要小心"},
+];
+
+let curFilter="all", curIdx=0, startTime=null, doneSet=new Set(JSON.parse(localStorage.getItem("fin_done")||"[]"));
+const $ = id=>document.getElementById(id);
+const norm = s=> (s||"").replace(/[\s,.，。、；；：：？！?!「」『』（）()【】\[\]・…—\-_\/\\*+=\n\r]/g,"");
+
+function filtered(){ return DATA.map((d,i)=>({...d,oi:i})).filter(d=>curFilter==="all"||d.cat===curFilter); }
+function render(){
+  const list = filtered();
+  if(curIdx>=list.length) curIdx=0;
+  const q = list[curIdx];
+  $("qCat").textContent=q.cat; $("qTerm").textContent=q.term;
+  $("qDef").textContent="📘 "+q.def; $("qWhy").textContent="💡 "+q.why;
+  $("qNum").textContent=(curIdx+1)+" / "+list.length;
+  $("countLabel").textContent="題庫共 "+DATA.length+" 題";
+  renderTarget(q.text);
+  $("input").value=""; $("feedback").textContent=""; startTime=null;
+  $("sTime").textContent="0.0s"; $("sSpeed").textContent="0"; $("sAcc").textContent="—";
+  updateDone();
+}
+function renderTarget(text){
+  const typed = norm($("input").value);
+  const box=$("targetBox"); box.innerHTML="";
+  [...text].forEach((ch,i)=>{
+    const sp=document.createElement("span");
+    sp.textContent=ch;
+    if(i<typed.length){ sp.className = typed[i]===ch ? "char-ok":"char-err"; }
+    else sp.className="char-pending";
+    box.appendChild(sp);
+  });
+}
+function tick(){
+  if(!startTime) return;
+  const t=(Date.now()-startTime)/1000;
+  $("sTime").textContent=t.toFixed(1)+"s";
+  const typed=norm($("input").value);
+  const q=filtered()[curIdx];
+  const total=q.text.length;
+  let ok=0; for(let i=0;i<Math.min(typed.length,total);i++) if(typed[i]===q.text[i]) ok++;
+  const acc = typed.length? Math.round(ok/Math.max(typed.length,total)*100):0;
+  const speed = t>1? Math.round((typed.length/t)*60):0;
+  $("sSpeed").textContent=speed; $("sAcc").textContent=(typed.length?acc+"%":"—");
+}
+setInterval(tick,200);
+
+$("input").addEventListener("input",e=>{
+  if(!startTime && e.target.value.length>0) startTime=Date.now();
+  renderTarget(filtered()[curIdx].text); tick();
+});
+$("hideToggle").addEventListener("change",e=>{ $("targetBox").classList.toggle("blur",e.target.checked); });
+$("btnReset").onclick=()=>{ $("input").value=""; startTime=null; renderTarget(filtered()[curIdx].text); $("feedback").textContent=""; };
+$("btnNext").onclick=()=>{ curIdx=(curIdx+1)%filtered().length; render(); $("input").focus(); };
+$("btnRandom").onclick=()=>{ curIdx=Math.floor(Math.random()*filtered().length); render(); $("input").focus(); };
+document.querySelectorAll("#cats .pill").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("#cats .pill").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active"); curFilter=b.dataset.cat; curIdx=0; render();
+});
+$("btnCheck").onclick=()=>{
+  const q=filtered()[curIdx];
+  const typed=norm($("input").value), target=norm(q.text);
+  let ok=0; for(let i=0;i<Math.max(typed.length,target.length);i++) if(typed[i]===target[i]) ok++;
+  const score=Math.round(ok/target.length*100);
+  const pass = score>=80 && typed.length>=target.length*0.9;
+  if(pass){
+    $("feedback").style.color="var(--ok)";
+    $("feedback").textContent=`🎉 過關！${score}分 — 「${q.term}」get！已存進度，下一題繼續。`;
+    doneSet.add(q.oi); localStorage.setItem("fin_done",JSON.stringify([...doneSet]));
+    updateDone(true);
+    setTimeout(()=>{ curIdx=(curIdx+1)%filtered().length; render(); },1200);
+  } else {
+    $("feedback").style.color="var(--err)";
+    $("feedback").textContent=`💪 ${score}分，再試一次！紅字就是打錯的地方，對照上面改過來。（80分過關）`;
+  }
+  updateDone();
+};
+function updateDone(save){
+  $("sDone").textContent=`${doneSet.size}/${DATA.length}`;
+  $("bar").style.width=(doneSet.size/DATA.length*100)+"%";
+  if(doneSet.size===0){ $("log").textContent="尚未完成任何一題，加油！"; return; }
+  const names=[...doneSet].sort((a,b)=>a-b).map(i=>DATA[i].term);
+  $("log").innerHTML=`已學會 <b>${doneSet.size}</b> 個觀念：<br>`+names.map(n=>`<span class="tag" style="margin:2px">${n}</span>`).join("");
+}
+$("btnClear").onclick=()=>{ if(confirm("確定清除學習紀錄？")){ doneSet=new Set(); localStorage.removeItem("fin_done"); updateDone(); } };
+render();
+</script>
+</body>
+</html>
